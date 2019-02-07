@@ -27,6 +27,11 @@ public class PollutionRestClientConfiguration {
         restTemplate.getInterceptors().add(createHttpRequestsInterceptor(pollutionRestProperties));
         return restTemplate;
     }
+    
+    @Bean
+    PollutionRestClient pollutionRestClient(RestTemplate restTemplate){
+        return new PollutionRestClient(restTemplate);
+    }
 
     @Bean
     @ConfigurationProperties("pollution.rest")
