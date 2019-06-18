@@ -4,4 +4,6 @@ public interface PollutionRetriever {
     
     Pollution getPollution(GPSLocation location);
     
+    Boolean isPollutionOk(GPSLocation location);
+    
 }

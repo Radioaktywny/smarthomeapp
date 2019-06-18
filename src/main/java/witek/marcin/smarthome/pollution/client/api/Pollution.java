@@ -14,4 +14,6 @@ public class Pollution {
     
     private String airQualityDescription;
     
+    private Weather weather;
+    
 }

@@ -15,4 +15,10 @@ public class AirlyPollutionRetriever implements PollutionRetriever {
         return PollutionRestConverter.convertToPollutionObj(
                 pollutionRestClient.getPollution(location.getLatitude(), location.getLongitude()));
     }
+
+    @Override
+    public Boolean isPollutionOk(GPSLocation location) {
+        final Pollution pollution = getPollution(location);
+        return pollution.getPm10Percentage() < 100 && pollution.getPm25Percentage() < 100;
+    }
 }

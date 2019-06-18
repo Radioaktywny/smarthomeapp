@@ -1,11 +1,14 @@
 package witek.marcin.smarthome.pollution.client.rest;
 
+import org.apache.http.HttpHeaders;
 import org.apache.http.client.HttpClient;
+import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -16,6 +19,7 @@ import org.springframework.web.util.UriTemplateHandler;
 import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 
 @Configuration
 public class PollutionRestClientConfiguration {
@@ -33,12 +37,6 @@ public class PollutionRestClientConfiguration {
         return new PollutionRestClient(restTemplate);
     }
 
-    @Bean
-    @ConfigurationProperties("pollution.rest")
-    PollutionRestProperties pollutionRestProperties() {
-        return new PollutionRestProperties();
-    }
-
     @Bean(name = "sslContext")
     SSLContext sslContext() throws KeyManagementException, NoSuchAlgorithmException {
         return SSLContextBuilder.create().build();
@@ -46,7 +44,7 @@ public class PollutionRestClientConfiguration {
 
     private ClientHttpRequestInterceptor createHttpRequestsInterceptor(PollutionRestProperties pollutionRestProperties) {
         return (request, body, execution) -> {
-            request.getHeaders().set("Accept", "application/json");
+            request.getHeaders().setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             request.getHeaders().set("Accept-Language", pollutionRestProperties.getLanguage());
             request.getHeaders().set("apikey", pollutionRestProperties.getApiKey());
             return execution.execute(request, body);

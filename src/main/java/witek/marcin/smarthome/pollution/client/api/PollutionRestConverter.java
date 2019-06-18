@@ -15,9 +15,11 @@ public class PollutionRestConverter {
                 .pm25Value(getPollutionValue(currentPollution, "PM25"))
                 .pm10Value(getPollutionValue(currentPollution, "PM10"))
                 .pm10Percentage(getPollutionInPercentage(currentPollution, "PM10"))
-                .pm10Percentage(getPollutionInPercentage(currentPollution, "PM25"))
+                .pm25Percentage(getPollutionInPercentage(currentPollution, "PM25"))
+                .weather(getWeatherMeasurement(currentPollution))
                 .build();
     }
+
 
     private static Double getPollutionInPercentage(Current currentPollution, String type) {
         return currentPollution.getStandards()
@@ -38,8 +40,16 @@ public class PollutionRestConverter {
     private static String getAirlyCaqiDescription(Current currentPollution) {
         return currentPollution.getIndexes()
                 .stream()
-                .filter(e->e.getName().equals("AIRLY_CAQI"))
+                .filter(e -> e.getName().equals("AIRLY_CAQI"))
                 .findFirst()
                 .orElse(new Index()).getDescription();
+    }
+
+    private static Weather getWeatherMeasurement(Current currentPollution) {
+        return Weather.builder()
+                .humidity(getPollutionValue(currentPollution, "HUMIDITY"))
+                .pressure(getPollutionValue(currentPollution, "PRESSURE"))
+                .temperature(getPollutionValue(currentPollution, "TEMPERATURE"))
+                .build();
     }
 }

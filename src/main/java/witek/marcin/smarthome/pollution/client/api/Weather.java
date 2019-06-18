@@ -5,7 +5,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class GPSLocation {
-    private String latitude;
-    private String longitude;
+public class Weather {
+
+    private Double pressure;
+    private Double humidity;
+    private Double temperature;
+
 }
